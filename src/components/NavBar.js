@@ -1,20 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Sun, MoonStarsFill } from "react-bootstrap-icons";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 
 const NavBar = ({ runInfo }) => {
-  const generateDialectNavigation = true;
-  const body = document.querySelector("body");
   const [mode, setMode] = useState(
     window.matchMedia("(prefers-color-scheme: dark)").matches,
   );
+  const { hash, key } = useLocation();
 
-  body.setAttribute("data-bs-theme", mode ? "dark" : "light");
-
-  function toggleMode() {
-    const newMode = !mode;
-    setMode(newMode);
-  }
+  useEffect(() => {
+    if (hash) {
+      const targetElement = document.getElementById(hash.substring(1));
+      targetElement?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [key, hash]);
+  useEffect(() => {
+    document
+      .querySelector("body")
+      .setAttribute("data-bs-theme", mode ? "dark" : "light");
+  }, [mode]);
 
   return (
     <>
@@ -24,9 +28,9 @@ const NavBar = ({ runInfo }) => {
         }`}
       >
         <div className="container-fluid">
-          <NavLink className="navbar-brand mb-0 h1" to="#">
+          <a className="navbar-brand mb-0 h1" href="#">
             Bowtie
-          </NavLink>
+          </a>
           <button
             className="navbar-toggler"
             type="button"
@@ -41,71 +45,68 @@ const NavBar = ({ runInfo }) => {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <NavLink className="nav-link" to="#run-info">
+                <Link className="nav-link" to={{ hash: "run-info" }}>
                   Run Info
-                </NavLink>
+                </Link>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to="#summary">
+                <Link className="nav-link" to={{ hash: "summary" }}>
                   Summary
-                </NavLink>
+                </Link>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to="#cases">
+                <Link className="nav-link" to={{ hash: "cases" }}>
                   Details
-                </NavLink>
+                </Link>
               </li>
-              {generateDialectNavigation && (
-                <li className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle"
-                    href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Dialects{" "}
-                  </a>
-                  <ul className="dropdown-menu">
-                    <li>
-                      <NavLink className="dropdown-item" to="/draft2020-12">
-                        2020-12
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink className="dropdown-item" to="/draft2019-09">
-                        2019-09
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink className="dropdown-item" to="/draft7">
-                        7
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink className="dropdown-item" to="/draft6">
-                        6
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink className="dropdown-item" to="/draft4">
-                        4
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink className="dropdown-item" to="/draft3">
-                        3
-                      </NavLink>
-                    </li>
-                  </ul>
-                </li>
-              )}
+              <li className="nav-item dropdown">
+                <a
+                  className="nav-link dropdown-toggle"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Dialects{" "}
+                </a>
+                <ul className="dropdown-menu">
+                  <li>
+                    <NavLink className="dropdown-item" to="/draft2020-12">
+                      2020-12
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/draft2019-09">
+                      2019-09
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/draft7">
+                      7
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/draft6">
+                      6
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/draft4">
+                      4
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/draft3">
+                      3
+                    </NavLink>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </div>
           <button
             id="theme-toggler"
             className="btn border-0 me-1"
-            onClick={toggleMode}
+            onClick={() => setMode(!mode)}
           >
             {mode ? <MoonStarsFill size={20} /> : <Sun size={20} />}
           </button>
