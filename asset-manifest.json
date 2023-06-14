@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/bowtie-frontend-test/static/css/main.efd5b8fc.css",
-    "main.js": "/bowtie-frontend-test/static/js/main.457f8434.js",
+    "main.js": "/bowtie-frontend-test/static/js/main.d2612120.js",
     "index.html": "/bowtie-frontend-test/index.html",
     "main.efd5b8fc.css.map": "/bowtie-frontend-test/static/css/main.efd5b8fc.css.map",
-    "main.457f8434.js.map": "/bowtie-frontend-test/static/js/main.457f8434.js.map"
+    "main.d2612120.js.map": "/bowtie-frontend-test/static/js/main.d2612120.js.map"
   },
   "entrypoints": [
     "static/css/main.efd5b8fc.css",
-    "static/js/main.457f8434.js"
+    "static/js/main.d2612120.js"
   ]
 }
