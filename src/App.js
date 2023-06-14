@@ -5,45 +5,31 @@ import RunInfoSection from "./components/RunInfo/RunInfoSection";
 import SummarySection from "./components/Summary/SummarySection";
 import { RunInfo } from "./data/runInfo";
 import { DetailsButtonModal } from "./components/Modals/DetailsButtonModal";
-import InputDataHandler from "./components/InputDataHandler";
 import { useEffect, useState } from "react";
 
-function App(props) {
-  const [lines, setLines] =useState(props.lines);
-  console.log(lines)
-
+function App({ draftName }) {
+  const [lines, setLines] = useState([]);
   useEffect(() => {
-    function handleFileUpload(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const json = e.target.result;
-        const dataObjectsArray = json.trim().split(/\n(?=\{)/);
-        var liness = dataObjectsArray.map((line) => JSON.parse(line));
-        console.log('file loaded')
-        setLines(liness);
-        // lines = liness;
-        console.log(lines)
-      };
+    document.getElementsByTagName("title")[0].textContent += " " + draftName;
+    fetch(`https://bowtie-json-schema.github.io/bowtie/${draftName}.jsonl`)
+      .then((response) => response.text())
+      .then((jsonl) => {
+        const dataObjectsArray = jsonl.trim().split(/\n(?=\{)/);
+        setLines(dataObjectsArray.map((line) => JSON.parse(line)));
+      });
+  }, [draftName]);
 
-      reader.readAsText(file);
-    }
-    const inputFile = document.querySelector("#fileInput");
-    inputFile.onchange = handleFileUpload;
-  }, []);
+  if (!lines.length) {
+    return null;
+  }
 
   const runInfo = new RunInfo(lines);
-
   const summary = runInfo.createSummary();
-
-  document.getElementsByTagName("title")[0].textContent +=
-    " " + runInfo.dialectShortName;
-
   return (
     <div>
       <NavBar runInfo={runInfo} />
+
       <div className="container p-4">
-        <InputDataHandler />
         <RunInfoSection runInfo={runInfo} />
         <SummarySection lines={lines} />
         <CasesSection lines={lines} />
@@ -53,4 +39,5 @@ function App(props) {
     </div>
   );
 }
+
 export default App;
